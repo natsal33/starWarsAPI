@@ -2,29 +2,52 @@ import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
+import CharacterTable from "./components/CharacterTable";
+import Button from "react-bootstrap/Button";
 
 function App() {
-  const [dataOutput, changeOutput] = useState("");
-  console.log("render1");
+  const [characterData, retrieveCharacterData] = useState("");
+  const [userInput, updateInput] = useState("");
+  const [pageNumber, flipPage] = useState(1);
 
   useEffect(() => {
-    console.log("render");
     axios
-      .get("https://swapi.dev/api/people/1")
+      .get("https://swapi.dev/api/people/", {
+        params: {
+          page: pageNumber,
+        },
+      })
       .then((response) => {
-        console.log(response.data);
-        changeOutput(response.data);
+        // console.log(response.data);
+        retrieveCharacterData(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const output = dataOutput;
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    updateInput(e.target.value);
+    // console.log(userInput);
+  };
+
+  const conductSearch = () => {};
 
   return (
-    <div className="App">
-      <p>{JSON.stringify(dataOutput)}</p>
+    <div>
+      <div>
+        <Form onSubmit={conductSearch()}>
+          <Form.Control
+            placeholder="Luke Skywalker"
+            onChange={(e) => handleChange(e)}
+          ></Form.Control>
+          <Button type="submit">Search</Button>
+          <CharacterTable charactersProp={characterData}></CharacterTable>
+        </Form>
+      </div>
+      <p>{JSON.stringify(characterData)}</p>
     </div>
   );
 }
