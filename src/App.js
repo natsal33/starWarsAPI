@@ -5,35 +5,57 @@ import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import CharacterTable from "./components/CharacterTable";
 import Button from "react-bootstrap/Button";
+import { ToggleButtonGroup } from "react-bootstrap";
+import ToggleButton from "react-bootstrap/ToggleButton";
 
 function App() {
-  const [characterData, retrieveCharacterData] = useState("");
-  const [userInput, updateInput] = useState("");
-  const [pageNumber, flipPage] = useState(1);
+  const PEOPLE_URL = "https://swapi.dev/api/people/";
+  const [characterData, setCharacterData] = useState("");
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [url, setURL] = useState(PEOPLE_URL);
 
   useEffect(() => {
     axios
-      .get("https://swapi.dev/api/people/", {
-        params: {
-          page: pageNumber,
-        },
-      })
+      .get(url, { params: { page: pageNumber } })
       .then((response) => {
-        // console.log(response.data);
-        retrieveCharacterData(response.data);
+        setCharacterData(response.data.results);
+        setNumberOfPages(response.data.count / 10);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [url, pageNumber]);
 
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    updateInput(e.target.value);
-    // console.log(userInput);
+  const changePage = (pageNumber) => {
+    console.log("Page Number " + pageNumber);
+    setPageNumber(pageNumber);
   };
 
-  const conductSearch = () => {};
+  const conductSearch = (e) => {
+    if (e) {
+      const newURL = PEOPLE_URL + "?search=" + e.target.value;
+      setURL(newURL);
+    }
+  };
+
+  const createPageArray = () => {
+    var newPageArray = [];
+    for (var i = 1; i <= numberOfPages; i++) {
+      newPageArray.push(
+        <ToggleButton
+          key={i}
+          id={i}
+          type="radio"
+          value={i}
+          checked={pageNumber === i}
+        >
+          {i}
+        </ToggleButton>
+      );
+    }
+    return newPageArray;
+  };
 
   return (
     <div>
@@ -41,13 +63,21 @@ function App() {
         <Form onSubmit={conductSearch()}>
           <Form.Control
             placeholder="Luke Skywalker"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => conductSearch(e)}
           ></Form.Control>
-          <Button type="submit">Search</Button>
           <CharacterTable charactersProp={characterData}></CharacterTable>
         </Form>
+        <ToggleButtonGroup
+          type="radio"
+          name="pages"
+          value={pageNumber}
+          onChange={(e) => {
+            changePage(e);
+          }}
+        >
+          {createPageArray()}
+        </ToggleButtonGroup>
       </div>
-      <p>{JSON.stringify(characterData)}</p>
     </div>
   );
 }
