@@ -7,6 +7,8 @@ import CharacterTable from "./components/CharacterTable";
 import Button from "react-bootstrap/Button";
 import { ToggleButtonGroup } from "react-bootstrap";
 import ToggleButton from "react-bootstrap/ToggleButton";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 function App() {
   const PEOPLE_URL = "https://swapi.dev/api/people/";
@@ -58,25 +60,44 @@ function App() {
   };
 
   return (
-    <div>
-      <div>
+    <div id="page">
+      <h1 className="d-flex p-2 justify-content-center">
+        Star Wars Character API{" "}
+      </h1>
+
+      <div className="p-2">
         <Form onSubmit={conductSearch()}>
-          <Form.Control
-            placeholder="Luke Skywalker"
-            onChange={(e) => conductSearch(e)}
-          ></Form.Control>
-          <CharacterTable charactersProp={characterData}></CharacterTable>
+          <Form.Group className="d-flex justify-content-center">
+            <Form.Label className="p-2">Search</Form.Label>
+            <Form.Control
+              placeholder="R2-D2"
+              onChange={(e) => conductSearch(e)}
+              className="w-25"
+            ></Form.Control>
+          </Form.Group>
+          <Row className="p-2">
+            <CharacterTable
+              id="table"
+              charactersProp={characterData}
+            ></CharacterTable>
+          </Row>
         </Form>
-        <ToggleButtonGroup
-          type="radio"
-          name="pages"
-          value={pageNumber}
-          onChange={(e) => {
-            changePage(e);
-          }}
-        >
-          {createPageArray()}
-        </ToggleButtonGroup>
+        <Row>
+          <Col md="2"></Col>
+          <Col md="8" className="d-flex justify-content-center">
+            <ToggleButtonGroup
+              type="radio"
+              name="pages"
+              value={pageNumber}
+              onChange={(e) => {
+                changePage(e);
+              }}
+            >
+              {createPageArray()}
+            </ToggleButtonGroup>
+          </Col>
+          <Col md="2"></Col>
+        </Row>
       </div>
     </div>
   );
