@@ -19,63 +19,57 @@ function App() {
   const [pageNumber, setPageNumber] = useState(1);
   const [url, setURL] = useState(PEOPLE_URL);
   const [characterArray, setCharacterArray] = useState([]);
+  const [homeworld, setHomeworld] = useState("");
 
   useEffect(() => {
-    axios
-      .get(url, { params: { page: pageNumber } })
-      .then((response) => {
-        const characterObject = response.data.results;
-        var newCharacterArray = characterObject.map((character) => {
-          var homeworld = "";
-          var species = "";
-
-          axios
-            .get(character.homeworld)
-            .then((response) => {
-              if (response.data.name) {
-                console.log("render 2");
-                homeworld = response.data.name;
-              }
-
-              axios
-                .get(character.species)
-                .then((response) => {
-                  if (response.data.name) {
-                    console.log("render 3");
-                    species = response.data.name;
-                  } else {
-                    species = "Human";
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-          return (
-            <tr key={character.name}>
-              <td>{character.name}</td>
-              <td>{character.birth_year}</td>
-              <td>{character.height}</td>
-              <td>{character.mass}</td>
-              <td>{homeworld}</td>
-              <td>{species}</td>
-            </tr>
-          );
+    async function fetchData() {
+      await axios
+        .get(url, { params: { page: pageNumber } })
+        .then((response) => {
+          const characterObject = response.data.results;
+          var newCharacterArray = characterObject.map((character) => {
+            setHomeworld("x");
+            console.log(homeworld);
+            await getCharacterProperty(character.homeworld);
+            return (
+              <tr key={character.name}>
+                <td>{character.name}</td>
+                <td>{character.birth_year}</td>
+                <td>{character.height}</td>
+                <td>{character.mass}</td>
+                <td>{homeworld}</td>
+                {/* <td>{getCharacterProperty(character.species)}</td> */}
+              </tr>
+            );
+          });
+          setCharacterArray(newCharacterArray);
+          setNumberOfPages(response.data.count / 10);
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        setCharacterArray(newCharacterArray);
-        setNumberOfPages(response.data.count / 10);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    }
+    fetchData();
   }, [url, pageNumber]);
 
   const changePage = (pageNumber) => {
     console.log("Page Number " + pageNumber);
     setPageNumber(pageNumber);
+  };
+
+  const getCharacterProperty = async (propertyURL) => {
+    if (propertyURL) {
+      await axios
+        .get(propertyURL)
+        .then((response) => {
+          if (response.data.name) {
+            setHomeworld(response.data.name);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const conductSearch = (e) => {
