@@ -89,8 +89,8 @@ function App() {
       <tr key={character.name}>
         <td>{character.name}</td>
         <td>{character.birth_year}</td>
-        <td>{character.height}</td>
-        <td>{character.mass}</td>
+        <td>{character.height}cm</td>
+        <td>{character.mass}kg</td>
         <td>{character.homeworldName}</td>
         <td>{character.speciesName}</td>
       </tr>
