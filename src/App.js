@@ -22,34 +22,29 @@ function App() {
   const [homeworld, setHomeworld] = useState("");
 
   useEffect(() => {
-    async function fetchData() {
-      await axios
-        .get(url, { params: { page: pageNumber } })
-        .then((response) => {
-          const characterObject = response.data.results;
-          var newCharacterArray = characterObject.map((character) => {
-            setHomeworld("x");
-            console.log(homeworld);
-            await getCharacterProperty(character.homeworld);
-            return (
-              <tr key={character.name}>
-                <td>{character.name}</td>
-                <td>{character.birth_year}</td>
-                <td>{character.height}</td>
-                <td>{character.mass}</td>
-                <td>{homeworld}</td>
-                {/* <td>{getCharacterProperty(character.species)}</td> */}
-              </tr>
-            );
-          });
-          setCharacterArray(newCharacterArray);
-          setNumberOfPages(response.data.count / 10);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    fetchData();
+    const peopleResponse = axios.get(url, {
+      params: { page: pageNumber },
+    });
+    const characterObject = peopleResponse.data.results;
+    var newCharacterArray = [];
+    characterObject.map((character) => {
+      const characterHomeworld = getCharacterProperty(character.homeworld);
+      setHomeworld(characterHomeworld.data.name);
+      return (
+        <tr key={character.name}>
+          <td>{character.name}</td>
+          <td>{character.birth_year}</td>
+          <td>{character.height}</td>
+          <td>{character.mass}</td>
+          <td>{homeworld}</td>
+          {/* <td>{getCharacterProperty(character.species)}</td> */}
+        </tr>
+      );
+    });
+    setCharacterArray(newCharacterArray);
+    setNumberOfPages(9);
+
+    return () => {};
   }, [url, pageNumber]);
 
   const changePage = (pageNumber) => {
@@ -57,19 +52,17 @@ function App() {
     setPageNumber(pageNumber);
   };
 
-  const getCharacterProperty = async (propertyURL) => {
-    if (propertyURL) {
-      await axios
-        .get(propertyURL)
-        .then((response) => {
-          if (response.data.name) {
-            setHomeworld(response.data.name);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  const getCharacterProperty = (propertyURL) => {
+    return axios
+      .get(propertyURL)
+      .then((response) => {
+        if (response.data.name) {
+          setHomeworld(response.data.name);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const conductSearch = (e) => {
