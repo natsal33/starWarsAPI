@@ -1,12 +1,3 @@
-#page {
-  background-image: url("./components/pictures/background-bb8.png");
-  background-position-y: bottom;
-  background-position-x: right;
-  background-repeat: no-repeat;
-  min-height: 1200px;
-  background-size: 75% auto;
-}
-
 #table {
   background-color: white;
 }
