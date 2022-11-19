@@ -9,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 #body {
-  background-image: url("./components/pictures/background-bb8.png");
+  background-image: url("./Pictures/background-bb8.png");
   min-height: 100%;
   background-position-y: bottom;
   background-position-x: right;

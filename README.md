@@ -1,23 +1,23 @@
-<!-- # Star Wars API
+# Star Wars Character Database
 
 <br>
-Easily create, store, and refer your expenses using this Expense Tracker. With inputs for date, category, vendor, and description you can customize expenses to make them easier to reference.
+An application to display and search for characters found in the Star Wars universe.
 <br>
 
-[Click here to to use!](https://expense-tracker-natmsal.herokuapp.com/)
+[Click here to to use!](X)
 
 <br>
 
-<img src='./pictures/demoPic.png'>
+<img src='./src/Pictures/demoPic'>
 
 ## Summary
 
-This expense tracker was implemented using React, React-Bootstrap, Javascript and is deployed using Heroku. The tracker has 5 inputs: a date picker, a category dropdown selector, and three text inputs for vendor, description, and amount. When all 5 inputs have a value, the user can press "submit" and an expense line will be added to the "Expense Log" table below. The user can also click on any expense in the table, and it will be deleted.
+This app uses Axios through React and Javascript to retrieve character data from the [swapi.dev](swapi.dev) API and uses React-Bootstrap to for style.
 
-This app also utilizes local storage for both the expense items and the inputs. This way, not only can the user be reassured that their expenses will still be there when they refresh or navigate back to the app, but their inputs will be stored as well if their session was interrupted.
+The app shows a loading screen until all axios promises have been resolved, and then displays each character and their corresponding data in a table in sets of 10. There is a page bar below the table that will take the user to the rest of the results in sets of 10. There's a search bar above the table that allows users to search for any star wars characters by name, and once the user presses submit, only the corresponding characters will be displayed in the table below. If the user inputs a string that has no match in the swapi.dev character API, the page displays "no results".
 
 <br>
 
 Author
 
-- **Natalie Salazar** - Software Developer -->
+- **Natalie Salazar** - Software Developer

@@ -19,24 +19,29 @@ function App() {
   const [url, setURL] = useState(PEOPLE_URL);
   const [characterArray, setCharacterArray] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [noResults, setNoResults] = useState(false);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
       try {
         const response = await axios.get(url, { params: { page: pageNumber } });
-        setNumberOfPages(Math.ceil(response.data.count / 10));
-        const characters = response.data.results;
-        for (const character of characters) {
-          const homeworldResponse = await axios.get(character.homeworld);
-          character.homeworldName = homeworldResponse.data.name;
-          if (character.species.length !== 0) {
-            const speciesResponse = await axios.get(character.species[0]);
-            character.speciesName = speciesResponse.data.name;
-          } else {
-            character.speciesName = "Human";
+        if (response.data.count > 0) {
+          setNumberOfPages(Math.ceil(response.data.count / 10));
+          const characters = response.data.results;
+          for (const character of characters) {
+            const homeworldResponse = await axios.get(character.homeworld);
+            character.homeworldName = homeworldResponse.data.name;
+            if (character.species.length !== 0) {
+              const speciesResponse = await axios.get(character.species[0]);
+              character.speciesName = speciesResponse.data.name;
+            } else {
+              character.speciesName = "Human";
+            }
+            setCharacterArray(characters);
           }
-          setCharacterArray(characters);
+        } else {
+          setNoResults(true);
         }
       } catch (error) {
         console.log(error);
@@ -54,6 +59,7 @@ function App() {
   };
 
   const conductSearch = (e) => {
+    setNoResults(false);
     const newURL = PEOPLE_URL + "?search=" + userInput;
     setURL(newURL);
     e.preventDefault();
@@ -124,7 +130,18 @@ function App() {
                     <th>Species</th>
                   </tr>
                 </thead>
-                <tbody>{tableRows}</tbody>
+                {noResults === false ? (
+                  <tbody>{tableRows}</tbody>
+                ) : (
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>No Results</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                )}
               </Table>
             </Row>
             <Row>
