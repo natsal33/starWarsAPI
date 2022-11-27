@@ -4,11 +4,11 @@
 An application to display and search for characters found in the Star Wars universe.
 <br>
 
-[Click here to to use!](X)
+[Click here to to use!](https://star-wars-api-natmsal33.herokuapp.com/)
 
 <br>
 
-<img src='./src/Pictures/demoPic'>
+<img src='./src/Pictures/demoPic.png'>
 
 ## Summary
 
