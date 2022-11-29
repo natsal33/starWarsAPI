@@ -30,14 +30,6 @@ function App() {
         for (const character of characters) {
           character.homeworld = await getHomeworldName(character.homeworld);
           character.species = await getSpeciesName(character.species);
-          // const homeworldResponse = await axios.get(character.homeworld);
-          // character.homeworldName = homeworldResponse.data.name;
-          // if (character.species.length !== 0) {
-          //   const speciesResponse = await axios.get(character.species[0]);
-          //   character.speciesName = speciesResponse.data.name;
-          // } else {
-          //   character.speciesName = "Human";
-          // }
           setCharacterArray(characters);
         }
       } else {
