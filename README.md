@@ -8,7 +8,7 @@ An application to display and search for characters found in the Star Wars unive
 
 <br>
 
-<img src='./src/Pictures/demoPic.png'>
+<img src='./src/Pictures/demoPic2.png'>
 
 ## Summary
 
